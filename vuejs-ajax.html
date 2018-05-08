@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <div id="main" class="container">
+       <div class="row">
+            <div class="col-ms-8">
+                <h1>datos del formulario</h1>
+                <input type="text" v-model="first_name" v-on:keyup.enter="addName" placeholder="nombre"><br><br>
+                <input type="text" v-model="last_name" v-on:keyup.enter="addName" placeholder="apellido"><br><br>
+                <input type="text" v-model="avatar" v-on:keyup.enter="addName" placeholder="url_img">
+               
+            </div>
+
+           <div class="">
+               <h1>lista ajax</h1>
+               <ul class="list-group">
+                   <li v-for="item in lists" class="list-group-item col-md-4">
+                        <a href="#">
+                            <img v-bind:src="item.avatar" alt="" style="border-radius: 50%;">
+                            <h1>{{ item.first_name }}</h1>
+                            <h3>{{ item.last_name }}</h3>
+                        </a>
+                   </li>
+               </ul>
+           </div>
+           <div class="col-ms-8">
+                <h1>Json</h1>
+                <pre>
+                    {{ $data | json }}
+                </pre>
+            </div>
+       </div>
+    </div>
+   
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.0/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.0/vue-resource.min.js"></script>
+    <script>
+        var urlUsers = 'https://reqres.in/api/users?page=2';
+        var createUseres ="https://reqres.in/api/users";
+        new Vue({
+            el: '#main',
+            created: function(){
+                this.getUsers();
+            },
+            data: {
+                lists: []
+            },
+            first_name: '',
+            last_name: '',
+            avatar: '',  
+            methods: {
+                getUsers: function(){
+                    this.$http.get(urlUsers).then(function(response){
+                        this.lists = response.body.data;
+                    });
+                },
+               
+                addName: function(){
+                    var objeto = {
+                        "first_name":this.first_name,
+                        "last_name":this.last_name,
+                        "avatar":this.avatar
+                    };
+                    this.lists.push(objeto);
+                }
+            }
+    
+        });
+    
+    </script>
+</body>
+</html>
